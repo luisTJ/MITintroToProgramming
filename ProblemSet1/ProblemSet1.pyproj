@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ec731b62-eab4-4edc-ac88-2ba314150a8f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>ProblemSet1.py</StartupFile>
+    <StartupFile>Problem2.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,7 +22,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ProblemSet1.py" />
+    <Compile Include="Problem1.py" />
+    <Compile Include="Problem2.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
