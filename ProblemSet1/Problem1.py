@@ -1,13 +1,14 @@
 """Problem 1:
-problem one is to show total amount paid and remaining balance when making minimum payment on credit card
+problem one is to show total amount paid and remaining balance
+when making minimum payment on credit card
 """
 
 
 def getNumberInput(prompt):
     while(True):
-        input = raw_input(prompt)
+        user_input = raw_input(prompt)
         try:
-            return float(input)
+            return float(user_input)
         except:
             pass
 
@@ -20,9 +21,9 @@ def getInterestPaid(balance, apr):
 def getPrincipalPaid(balance, apr, paid):
     return paid - getInterestPaid(balance, apr)
 
-outstanding = getNumberInput("Enter the outstanding balance on your credit card: ");
-apr = getNumberInput("Enter the annual credit card interest rate as a decimal: ");
-min_payment_rate = getNumberInput("Enter the minimum monthly payment rate as a decimal: ");
+outstanding = getNumberInput("Enter the outstanding balance on your credit card: ")
+apr = getNumberInput("Enter the annual credit card interest rate as a decimal: ")
+min_payment_rate = getNumberInput("Enter the minimum monthly payment rate as a decimal: ")
 print "";
 
 total_paid = 0.00
