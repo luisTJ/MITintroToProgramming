@@ -95,9 +95,9 @@ def hangman(tries = 6):
                 matched = True
 
         if(matched):
-            print "%-1s %37s" % ("Good Guess: ", " ".join(game))
+            print "%-45s%-20s" % ("Good Guess: ", " ".join(game))
         else:
-            print "Oops! That letter is not in my word: "+ " ".join(game)
+            print "%-45s%-20s" % ("Oops! That letter is not in my word: ", " ".join(game))
             tries -= 1
 
         printline()
