@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>7eeb9dac-ecfa-476a-98de-942a634e2c48</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Problem1.py</StartupFile>
+    <StartupFile>Hangman.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,6 +23,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Problem1.py" />
+    <Compile Include="Problem2.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Newton.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hangman.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="words.txt" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

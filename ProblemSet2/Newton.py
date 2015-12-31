@@ -30,23 +30,18 @@ epsilon: float > 0
 returns: tuple (float, int)
 
 """
-deep = 0
-def wrapper(poly, x_0, epsilon):
-    global deep
-    return (compute_root(poly,x_0,epsilon),deep)
 
 def compute_root(poly, x_0, epsilon):
-    global deep
-    deep += 1
-    result = evaluate_poly(poly, x_0)
-    if( abs(result) < epsilon ):
-        return x_0
-    else:
+    count = 1;
+    x = x_0
+    result = evaluate_poly(poly, x)
+    while(abs(result) > epsilon ):
+        count += 1
         deriv = compute_deriv(poly)
-        new_x = x_0 - result / evaluate_poly(deriv, x_0)
-        return  compute_root(poly,new_x,epsilon)
-
-
+        new_x = x - result / evaluate_poly(deriv, x)
+        result = evaluate_poly(poly, new_x)
+        x = new_x
+    return (x,count)
 
 def evaluate_poly(poly, x):
     sum = 0
@@ -56,6 +51,8 @@ def evaluate_poly(poly, x):
        
 
 def compute_deriv(poly):
+    if(len(poly) < 2):
+        return (0.0,)
     result = []
     for i in range(1,len(poly)):
         result.append(poly[i]*i)
@@ -65,5 +62,4 @@ def compute_deriv(poly):
 poly = (-13.39, 0.0, 17.5, 3.0, 1.0) #x4 + 3.0x3 + 17.5x2 - 13.39 
 x_0 = 0.1
 epsilon = .0001
-#print compute_root(poly, x_0, epsilon) #(0.80679075379635201, 8)
-print wrapper(poly,x_0,epsilon)
+print compute_root(poly, x_0, epsilon) #(0.80679075379635201, 8)
