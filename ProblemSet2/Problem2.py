@@ -17,6 +17,8 @@ returns: tuple of numbers
 
 """
 def compute_deriv(poly):
+    if(len(poly)==1):
+        return (0.0,)
     result = []
     for i in range(1,len(poly)):
         result.append(poly[i]*i)
