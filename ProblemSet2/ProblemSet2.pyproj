@@ -3,15 +3,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>ec731b62-eab4-4edc-ac88-2ba314150a8f</ProjectGuid>
+    <ProjectGuid>7eeb9dac-ecfa-476a-98de-942a634e2c48</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Problem3.py</StartupFile>
+    <StartupFile>Problem1.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>ProblemSet1</Name>
-    <RootNamespace>ProblemSet1</RootNamespace>
+    <Name>ProblemSet2</Name>
+    <RootNamespace>ProblemSet2</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,12 +23,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Problem1.py" />
-    <Compile Include="Problem2.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Problem3.py">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

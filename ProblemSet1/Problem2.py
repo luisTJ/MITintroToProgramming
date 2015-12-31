@@ -1,13 +1,10 @@
-"""Problem 1:
-problem 2 is to show what is the minimum to pay each month to pay off in 12 months time
-"""
 
 
 def getNumberInput(prompt):
     while(True):
-        input = raw_input(prompt)
+        user_input = raw_input(prompt)
         try:
-            return float(input)
+            return float(user_input)
         except:
             pass
 
