@@ -9,6 +9,8 @@
 # (you don't need to understand this helper code)
 import random
 import string
+import urllib
+from bs4 import BeautifulSoup
 
 WORDLIST_FILENAME = "words.txt"
 
@@ -64,6 +66,30 @@ def printline(num = 10):
         num = 10
     print "-"*num
 
+def printDefinition(word):
+    try:
+        html = getHtml(word)
+        definition = parseHtml(html)
+        printline()
+        print definition
+    except Exception as e:
+        pass
+
+def getHtml(word):
+    query = urllib.urlencode({'query': word})
+    url = 'http://services.aonaware.com/DictService/Default.aspx?action=define&dict=wn&%s' % query
+    search_response = urllib.urlopen(url)
+    html = search_response.read()
+    return html
+
+def parseHtml(html):
+    soup = BeautifulSoup(html,"html.parser")
+    header = soup.span.text
+    meaning = soup.pre.get_text()
+    text = header+"\r\n\r\n"+meaning
+    return text
+
+
 def hangman(tries = 6):
     
     try:
@@ -105,10 +131,12 @@ def hangman(tries = 6):
             break;
         
 
-    if(tries < 0):
+    if(tries <= 0):
         print "You're dead"
-        print "The answer is"+ answer
+        print "The answer is "+ answer
     else:
         print "Congratulations, you won!"
+    
+    printDefinition(answer)
 
-hangman(20)
+hangman(8)
