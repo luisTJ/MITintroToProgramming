@@ -10,9 +10,20 @@
 import random
 import string
 import urllib
+import json
 from bs4 import BeautifulSoup
 
 WORDLIST_FILENAME = "words.txt"
+API_KEY_FILENAME = "key.json"
+
+key = None
+
+def load_keys():
+
+    global key
+    with open('key.json') as key_file:    
+        key  = json.load(key_file)
+
 
 def load_words():
     """
@@ -68,25 +79,57 @@ def printline(num = 10):
 
 def printDefinition(word):
     try:
-        html = getHtml(word)
-        definition = parseHtml(html)
-        printline()
-        print definition
+        success = queryAonaware(word)
+        if(not success):
+            queryMariamWebSter(word)
     except Exception as e:
         pass
 
+def queryAonaware(word):
+    try:
+        query = urllib.urlencode({'query':word})
+        url = 'http://services.aonaware.com/DictService/Default.aspx?action=define&dict=wn&%s' % query
+        search_response = urllib.urlopen(url)
+        html = search_response.read()
+        definition = parseHtml(html)
+        printline()
+        soup = BeautifulSoup(html,"html.parser")
+        header = soup.span.text
+        meaning = soup.pre.get_text()
+        text = header+"\r\n\r\n"+meaning
+        print definition
+        return True
+    except Exception:
+        return False
+
+def queryMariamWebSter(word):
+    try:
+        with open('key.json') as key_file:    
+            key  = json.load(key_file)
+            url = "http://www.dictionaryapi.com/api/v1/references/collegiate/xml/{0}?key={1}".format(word, key["dict_key"])
+            search_response = urllib.urlopen(url)
+            html = search_response.read()
+            soup = BeautifulSoup(html,"xml.parser")
+            #header = word + soup.
+            return True
+    except Exception:
+        return False
+
 def getHtml(word):
-    query = urllib.urlencode({'query': word})
-    url = 'http://services.aonaware.com/DictService/Default.aspx?action=define&dict=wn&%s' % query
+
+    global key
+    url = "http://www.dictionaryapi.com/api/v1/references/collegiate/xml/{0}?key={1}".format(word, key["dict_key"])
+    #url = 'http://services.aonaware.com/DictService/Default.aspx?action=define&dict=wn&%s' % query
     search_response = urllib.urlopen(url)
     html = search_response.read()
     return html
 
 def parseHtml(html):
     soup = BeautifulSoup(html,"html.parser")
-    header = soup.span.text
-    meaning = soup.pre.get_text()
-    text = header+"\r\n\r\n"+meaning
+    #header = soup.span.text
+    #meaning = soup.pre.get_text()
+    #text = header+"\r\n\r\n"+meaning
+
     return text
 
 
@@ -139,4 +182,8 @@ def hangman(tries = 6):
     
     printDefinition(answer)
 
-hangman(8)
+load_keys();
+printDefinition("renitent")
+#hangman(8)
+
+#http://www.merriam-webster.com/dictionary/renitent
