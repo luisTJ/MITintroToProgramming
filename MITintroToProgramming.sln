@@ -7,6 +7,10 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ProblemSet1", "ProblemSet1\
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ProblemSet2", "ProblemSet2\ProblemSet2.pyproj", "{7EEB9DAC-ECFA-476A-98DE-942A634E2C48}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ProblemSet3", "ProblemSet3\ProblemSet3.pyproj", "{784AD654-4E93-4AD0-BEE8-D6BA68CA02FF}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ProblemSet4_CeasarCipher", "ProblemSet4_CeasarCipher\ProblemSet4_CeasarCipher.pyproj", "{0325D399-A886-41A5-A7BE-9B77A1AA5DF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +21,10 @@ Global
 		{EC731B62-EAB4-4EDC-AC88-2BA314150A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EEB9DAC-ECFA-476A-98DE-942A634E2C48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7EEB9DAC-ECFA-476A-98DE-942A634E2C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{784AD654-4E93-4AD0-BEE8-D6BA68CA02FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{784AD654-4E93-4AD0-BEE8-D6BA68CA02FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0325D399-A886-41A5-A7BE-9B77A1AA5DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0325D399-A886-41A5-A7BE-9B77A1AA5DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
