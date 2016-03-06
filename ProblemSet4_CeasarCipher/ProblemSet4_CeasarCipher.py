@@ -248,7 +248,21 @@ def apply_shifts(text, shifts):
     >>> apply_shifts("Do Androids Dream of Electric Sheep?", [(0,6), (3, 18), (12, 16)])
     'JufYkaolfapxQdrnzmasmRyrpfdvpmEurrb?'
     """
-    ### TODO.
+    if(type(shifts) is int):
+        shift = [shifts]
+
+    result = text;
+    for item in shifts:
+        item_type = type(item)
+        if(item_type is tuple):
+            start_pos = item[0]
+            if(start_pos < 0):
+                start_pos = 0
+            result = result[0:item[0]] + apply_coder(result[item[0]:],build_encoder(item[1]))
+        elif(item_type is int):
+            result = apply_coder(text,build_encoder(shift))
+        #maybe do list version too?
+    return result
  
 #
 # Problem 4: Multi-level decryption.
@@ -314,9 +328,16 @@ def decrypt_fable():
     ### TODO.
 
 
-cipher = apply_shift('This is a test.', 8)
-shift = find_best_shift(wordlist,cipher)
-print apply_coder(cipher,build_decoder(shift))
+#cipher = apply_shift('This is a test.', 8)
+#shift = find_best_shift(wordlist,cipher)
+#print apply_coder(cipher,build_decoder(shift))
+
+#Example:
+#>>> apply_shifts("Do Androids Dream of Electric Sheep?", [(0,6), (3, 18), (12, 16)])
+#'JufYkaolfapxQdrnzmasmRyrpfdvpmEurrb?'
+
+cipher = apply_shifts("Do Androids Dream of Electric Sheep?", [(0,6), (3, 18), (12, 16)])
+print cipher
 
     
 #What is the moral of the story?
