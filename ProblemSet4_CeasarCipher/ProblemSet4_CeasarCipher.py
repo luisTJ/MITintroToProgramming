@@ -4,6 +4,7 @@
 #
 import string
 import random
+import sys
 
 WORDLIST_FILENAME = "ps4/words.txt"
 
@@ -27,7 +28,7 @@ def load_words():
     print "  ", len(wordlist), "words loaded."
     return wordlist
 
-wordlist = load_words()
+#wordlist = load_words()
 
 def is_word(wordlist, word):
     """
@@ -92,6 +93,15 @@ def get_fable_string():
     f.close()
     return fable
 
+def printDict(dict):
+    keys = dict.keys()
+    keys.sort()
+    for key in keys :
+        sys.stdout.write(key)
+    sys.stdout.write("\n")
+    for key in keys :
+        sys.stdout.write(dict[key])
+    sys.stdout.write("\n")
 
 # (end of helper code)
 # -----------------------------------
@@ -120,83 +130,52 @@ def build_coder(shift):
     'v': 'y', 'y': 'a', 'x': ' ', 'z': 'b'}
     (The order of the key-value pairs may be different.)
     """
-    ### TODO.
+    #convert negative to comparable positive
+    if(shift < 0):
+        shift = (27 - abs(shift)%27)%27
+    elif(shift > 0):
+        shift = shift % 27
+    result = {}
+    a = ord('a')
+    for i in range(0,26):
+        key = chr(a + i)
+        tmp = i+shift
+        
+        val = chr(a + (tmp % 27))
+
+        if(val == '{'): #{ comes after z
+            val = ' '
+
+        result[key] = val
+        result[key.upper()] = val.upper()
+
+    if(shift > 0):
+        result[' '] = chr(a+shift-1)
+    else:
+        result[' '] = ' '
+
+    printDict(result)
+    return result
+
 
 def build_encoder(shift):
-    """
-    Returns a dict that can be used to encode a plain text. For example, you
-    could encrypt the plain text by calling the following commands
-    >>>encoder = build_encoder(shift)
-    >>>encrypted_text = apply_coder(plain_text, encoder)
-    
-    The cipher is defined by the shift value. Ignores non-letter characters
-    like punctuation and numbers.
-
-    shift: 0 <= int < 27
-    returns: dict
-
-    Example:
-    >>> build_encoder(3)
-    {' ': 'c', 'A': 'D', 'C': 'F', 'B': 'E', 'E': 'H', 'D': 'G', 'G': 'J',
-    'F': 'I', 'I': 'L', 'H': 'K', 'K': 'N', 'J': 'M', 'M': 'P', 'L': 'O',
-    'O': 'R', 'N': 'Q', 'Q': 'T', 'P': 'S', 'S': 'V', 'R': 'U', 'U': 'X',
-    'T': 'W', 'W': 'Z', 'V': 'Y', 'Y': 'A', 'X': ' ', 'Z': 'B', 'a': 'd',
-    'c': 'f', 'b': 'e', 'e': 'h', 'd': 'g', 'g': 'j', 'f': 'i', 'i': 'l',
-    'h': 'k', 'k': 'n', 'j': 'm', 'm': 'p', 'l': 'o', 'o': 'r', 'n': 'q',
-    'q': 't', 'p': 's', 's': 'v', 'r': 'u', 'u': 'x', 't': 'w', 'w': 'z',
-    'v': 'y', 'y': 'a', 'x': ' ', 'z': 'b'}
-    (The order of the key-value pairs may be different.)
-
-    HINT : Use build_coder.
-    """
-    ### TODO.
+    return build_coder(shift)
 
 def build_decoder(shift):
-    """
-    Returns a dict that can be used to decode an encrypted text. For example, you
-    could decrypt an encrypted text by calling the following commands
-    >>>encoder = build_encoder(shift)
-    >>>encrypted_text = apply_coder(plain_text, encoder)
-    >>>decrypted_text = apply_coder(plain_text, decoder)
-    
-    The cipher is defined by the shift value. Ignores non-letter characters
-    like punctuation and numbers.
+    return build_coder(-shift)
 
-    shift: 0 <= int < 27
-    returns: dict
-
-    Example:
-    >>> build_decoder(3)
-    {' ': 'x', 'A': 'Y', 'C': ' ', 'B': 'Z', 'E': 'B', 'D': 'A', 'G': 'D',
-    'F': 'C', 'I': 'F', 'H': 'E', 'K': 'H', 'J': 'G', 'M': 'J', 'L': 'I',
-    'O': 'L', 'N': 'K', 'Q': 'N', 'P': 'M', 'S': 'P', 'R': 'O', 'U': 'R',
-    'T': 'Q', 'W': 'T', 'V': 'S', 'Y': 'V', 'X': 'U', 'Z': 'W', 'a': 'y',
-    'c': ' ', 'b': 'z', 'e': 'b', 'd': 'a', 'g': 'd', 'f': 'c', 'i': 'f',
-    'h': 'e', 'k': 'h', 'j': 'g', 'm': 'j', 'l': 'i', 'o': 'l', 'n': 'k',
-    'q': 'n', 'p': 'm', 's': 'p', 'r': 'o', 'u': 'r', 't': 'q', 'w': 't',
-    'v': 's', 'y': 'v', 'x': 'u', 'z': 'w'}
-    (The order of the key-value pairs may be different.)
-
-    HINT : Use build_coder.
-    """
-    ### TODO.
- 
 
 def apply_coder(text, coder):
-    """
-    Applies the coder to the text. Returns the encoded text.
-
-    text: string
-    coder: dict with mappings of characters to shifted characters
-    returns: text after mapping coder chars to original text
-
-    Example:
-    >>> apply_coder("Hello, world!", build_encoder(3))
-    'Khoor,czruog!'
-    >>> apply_coder("Khoor,czruog!", build_decoder(3))
-    'Hello, world!'
-    """
-    ### TODO.
+    result = ""
+    i = 0
+    size = len(text)
+    while i < size:
+        try:
+            result += coder[text[i]]
+        except:
+            result += text[i]
+        i += 1
+    return result
   
 
 def apply_shift(text, shift):
@@ -216,7 +195,7 @@ def apply_shift(text, shift):
     >>> apply_shift('This is a test.', 8)
     'Apq hq hiham a.'
     """
-    ### TODO.
+    return apply_coder(text,build_encoder(shift))
    
 #
 # Problem 2: Codebreaking.
@@ -324,6 +303,7 @@ def decrypt_fable():
     ### TODO.
 
 
+print apply_shift('This is a test.', 8)
 
     
 #What is the moral of the story?
