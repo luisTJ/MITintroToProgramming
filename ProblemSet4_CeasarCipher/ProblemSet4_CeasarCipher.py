@@ -89,7 +89,7 @@ def get_fable_string():
     """
     Returns a fable in encrypted text.
     """
-    f = open("fable.txt", "r")
+    f = open("ps4/fable.txt", "r")
     fable = str(f.read())
     f.close()
     return fable
@@ -155,7 +155,7 @@ def build_coder(shift):
     else:
         result[' '] = ' '
 
-    printDict(result)
+    #printDict(result)
     return result
 
 
@@ -196,6 +196,8 @@ def apply_shift(text, shift):
     >>> apply_shift('This is a test.', 8)
     'Apq hq hiham a.'
     """
+    if(type(shift) is list):
+        return apply_shifts(text,shifts)
     return apply_coder(text,build_encoder(shift))
    
 #
@@ -303,7 +305,7 @@ def find_best_shifts(wordlist, text):
     return shifts if shifts.count > 0 else None
 
 
-def find_best_shifts_rec(wordlist, text, start):
+def find_best_shifts_rec(wordlist, text, start, encoders=None):
     """
     Given a scrambled string and a starting position from which
     to decode, returns a shift key that will decode the text to
@@ -315,41 +317,61 @@ def find_best_shifts_rec(wordlist, text, start):
     wordlist: list of words
     text: scambled text to try to find the words for
     start: where to start looking at shifts
+    encoders: pre-built encoders to be used 
     returns: list of tuples.  each tuple is (position in text, amount of shift)
     """
     if start > len(text)-1 :
         return []
 
+    if(encoders == None):
+        encoders = []
+        for i in xrange(28):
+            encoders.append(build_encoder(i))
+
     shifts = []
 
+    max_match_len = 0
+    max_match_text = ""
+    max_match_index = -1
+    skeptical_threshold = 3
+
     for i in xrange(28):
-        encoder = build_encoder(i)
+        encoder = encoders[i]
         may_contains_plain_text = apply_coder(text,encoder)
         portion = may_contains_plain_text[start:]
         words = portion.split(' ')
         plain_text_recovered_len = 0
-        count = 0
+        #count = 0
         for word in words:
             if(is_word(wordlist,word)):
                plain_text_recovered_len += len(word)+1
-               count += 1
+               #count += 1
             else:
                 break
         
-        if(count > 0):
-            shifts.append((start,i))
-            shifts = itertools.chain(shifts,find_best_shifts_rec(wordlist,may_contains_plain_text,start+plain_text_recovered_len))
-            #below works but less efficient 
-            #shifts += find_best_shifts_rec(wordlist,may_contains_plain_text,start+plain_text_recovered_len)
-            return shifts
+        if plain_text_recovered_len > max_match_len :
+
+            if(plain_text_recovered_len > skeptical_threshold): # a shortcut to make algo run a little faster
+                shifts.append((start,i))
+                shifts = itertools.chain(shifts,find_best_shifts_rec(wordlist,may_contains_plain_text,start+plain_text_recovered_len,encoders))
+                return shifts
+            else:
+                max_match_len = plain_text_recovered_len
+                max_match_index = i
+                max_match_text = may_contains_plain_text
+
+    if max_match_index != -1:
+        shifts.append((start,max_match_index))
+        shifts = itertools.chain(shifts,find_best_shifts_rec(wordlist,max_match_text,start+max_match_len,encoders))
+        #below works but less efficient 
+        #shifts += find_best_shifts_rec(wordlist,may_contains_plain_text,start+plain_text_recovered_len)
+        return shifts
     else:
         return []
 
-    return shifts
-
 
 def decrypt_fable():
-     """
+    """
     Using the methods you created in this problem set,
     decrypt the fable given by the function get_fable_string().
     Once you decrypt the message, be sure to include as a comment
@@ -358,22 +380,31 @@ def decrypt_fable():
 
     returns: string - fable in plain text
     """
-    ### TODO.
+    cipher_fable = get_fable_string()
+    shifts = find_best_shifts(wordlist, cipher_fable)
+    return apply_shifts(cipher_fable,shifts)
 
 
-#cipher = apply_shift('This is a test.', 8)
-#shift = find_best_shift(wordlist,cipher)
-#print apply_coder(cipher,build_decoder(shift))
+print "\n\n-----------------------\n\n"
+
+cipher = apply_shift('This is a test.', 8)
+shift = find_best_shift(wordlist,cipher)
+print apply_coder(cipher,build_decoder(shift))
+
+print "\n\n-----------------------\n\n"
 
 cipher = apply_shifts("Do Androids Dream of Electric Sheep?", [(0,6), (3, 18), (12, 16)])
 shifts = find_best_shifts(wordlist, cipher)
 print apply_shifts(cipher,shifts)
 
+print "\n\n-----------------------\n\n"
+
+print decrypt_fable()
     
-#What is the moral of the story?
-#
-#
-#
-#
-#
+# What is the moral of the story?
+# An Ingenious Man who had built a flying machine invited a great concourse of people to see it go up. at the appointed moment, everything being ready,
+# he boarded the car and turned on the power. the machine immediately broke through the massive substructure upon which it was builded, and sank out of
+# sight into the earth, the aeronaut springing out barely in time to save himself. "well," said he, "i have done enough to demonstrate the correctness of
+# my details. the defects," he added, with a add hat the ruined brick work, "are merely basic and fundamental." upon this assurance the people came ox
+# ward with subscriptions to build a second machine
 
