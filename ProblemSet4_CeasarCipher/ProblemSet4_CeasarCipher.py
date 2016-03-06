@@ -28,7 +28,7 @@ def load_words():
     print "  ", len(wordlist), "words loaded."
     return wordlist
 
-#wordlist = load_words()
+wordlist = load_words()
 
 def is_word(wordlist, word):
     """
@@ -216,7 +216,18 @@ def find_best_shift(wordlist, text):
     >>> apply_coder(s, build_decoder(8)) returns
     'Hello, world!'
     """
-    ### TODO
+    for i in range(28):
+        decoder = build_decoder(i)
+        original_text = apply_coder(text,decoder)
+        words = original_text.split(' ')
+        count = 0
+        for word in words:
+            if(not is_word(wordlist,word)):
+                break;
+            else:
+                count +=1
+        if(count == len(words)):
+            return i
    
 #
 # Problem 3: Multi-level encryption.
@@ -303,7 +314,9 @@ def decrypt_fable():
     ### TODO.
 
 
-print apply_shift('This is a test.', 8)
+cipher = apply_shift('This is a test.', 8)
+shift = find_best_shift(wordlist,cipher)
+print apply_coder(cipher,build_decoder(shift))
 
     
 #What is the moral of the story?
