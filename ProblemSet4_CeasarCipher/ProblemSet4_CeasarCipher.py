@@ -5,6 +5,7 @@
 import string
 import random
 import sys
+import itertools
 
 WORDLIST_FILENAME = "ps4/words.txt"
 
@@ -263,7 +264,7 @@ def apply_shifts(text, shifts):
             result = apply_coder(text,build_encoder(shift))
         #maybe do list version too?
     return result
- 
+
 #
 # Problem 4: Multi-level decryption.
 #
@@ -298,6 +299,10 @@ def find_best_shifts(wordlist, text):
     Do Androids Dream of Electric Sheep?
     """
 
+    shifts = list(find_best_shifts_rec(wordlist,text,0))
+    return shifts if shifts.count > 0 else None
+
+
 def find_best_shifts_rec(wordlist, text, start):
     """
     Given a scrambled string and a starting position from which
@@ -312,7 +317,35 @@ def find_best_shifts_rec(wordlist, text, start):
     start: where to start looking at shifts
     returns: list of tuples.  each tuple is (position in text, amount of shift)
     """
-    ### TODO.
+    if start > len(text)-1 :
+        return []
+
+    shifts = []
+
+    for i in xrange(28):
+        encoder = build_encoder(i)
+        may_contains_plain_text = apply_coder(text,encoder)
+        portion = may_contains_plain_text[start:]
+        words = portion.split(' ')
+        plain_text_recovered_len = 0
+        count = 0
+        for word in words:
+            if(is_word(wordlist,word)):
+               plain_text_recovered_len += len(word)+1
+               count += 1
+            else:
+                break
+        
+        if(count > 0):
+            shifts.append((start,i))
+            shifts = itertools.chain(shifts,find_best_shifts_rec(wordlist,may_contains_plain_text,start+plain_text_recovered_len))
+            #below works but less efficient 
+            #shifts += find_best_shifts_rec(wordlist,may_contains_plain_text,start+plain_text_recovered_len)
+            return shifts
+    else:
+        return []
+
+    return shifts
 
 
 def decrypt_fable():
@@ -332,12 +365,9 @@ def decrypt_fable():
 #shift = find_best_shift(wordlist,cipher)
 #print apply_coder(cipher,build_decoder(shift))
 
-#Example:
-#>>> apply_shifts("Do Androids Dream of Electric Sheep?", [(0,6), (3, 18), (12, 16)])
-#'JufYkaolfapxQdrnzmasmRyrpfdvpmEurrb?'
-
 cipher = apply_shifts("Do Androids Dream of Electric Sheep?", [(0,6), (3, 18), (12, 16)])
-print cipher
+shifts = find_best_shifts(wordlist, cipher)
+print apply_shifts(cipher,shifts)
 
     
 #What is the moral of the story?
